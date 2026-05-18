@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fafaf7;
+  --foreground: #1a1a1a;
+  --muted: #666666;
+  --border: #e5e5e0;
+  --card: #ffffff;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+textarea,
+input {
+  font-family: inherit;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+/* Smooth accordion animation */
+.section-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.section-body.open {
+  grid-template-rows: 1fr;
+}
+
+.section-body > div {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Chevron rotation */
+.chevron {
+  transition: transform 0.3s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Question fade-in */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Save indicator */
+@keyframes pulseIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.saved-indicator {
+  animation: pulseIn 0.25s ease;
+}
+
+/* Toast */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.toast {
+  animation: slideUp 0.3s ease;
+}
+
+/* Confetti container */
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  z-index: 9999;
+}
