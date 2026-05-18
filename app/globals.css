@@ -250,6 +250,106 @@ input:focus {
   animation: victoryBounce 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) both;
 }
 
+/* Scroll reveal (visible-by-default + IO + fallback) */
+[data-revealed="false"] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+[data-revealed="false"][data-reveal="left"] {
+  transform: translate3d(-40px, 0, 0);
+}
+[data-revealed="false"][data-reveal="right"] {
+  transform: translate3d(40px, 0, 0);
+}
+[data-revealed="false"][data-reveal="zoom"] {
+  transform: scale(0.94);
+}
+[data-reveal] {
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hero floating orbs */
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -30px); }
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: floatOrb 8s ease-in-out infinite;
+}
+
+/* Price counter */
+.price-counter {
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Sparkle */
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.sparkle {
+  animation: sparkle 2.4s ease-in-out infinite;
+}
+
+/* Card tilt on hover (desktop) */
+@media (hover: hover) and (pointer: fine) {
+  .plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.plan-card {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Floating WhatsApp button */
+@keyframes fabIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.7); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.fab {
+  animation: fabIn 0.45s cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.fab-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25D366;
+  opacity: 0.6;
+  animation: fabPulse 2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes fabPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Marquee for hero bottom strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -258,5 +358,9 @@ input:focus {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  [data-revealed="false"] {
+    opacity: 1;
+    transform: none;
   }
 }
