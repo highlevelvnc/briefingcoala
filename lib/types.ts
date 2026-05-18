@@ -1,14 +1,16 @@
 export type Question = {
-  text: string;
+  q: string;
+  placeholder?: string;
+  hint?: string;
 };
 
 export type Section = {
   id: string;
   title: string;
   subtitle: string;
-  icon: string; // emoji/símbolo
-  color: string; // tailwind classes
-  questions: string[];
+  icon: string;
+  color: string;
+  questions: Question[];
 };
 
 export type Briefing = {

@@ -115,7 +115,7 @@ function buildEmailHTML(
                 <tr>
                   <td style="padding:14px 16px;background:#fafafa;border-radius:8px">
                     <p style="margin:0;font-size:13px;color:#666;font-weight:500">
-                      ${qi + 1}. ${escapeHtml(q)}
+                      ${qi + 1}. ${escapeHtml(q.q)}
                     </p>
                     <p style="margin:8px 0 0;font-size:14px;color:${
                       isEmpty ? "#bbb" : "#1a1a1a"
@@ -208,7 +208,7 @@ function buildEmailText(
     out += "─".repeat(60) + "\n";
     sec.questions.forEach((q, qi) => {
       const a = answers[`${sec.id}:${qi}`]?.trim() || "—";
-      out += `\n${qi + 1}. ${q}\n${a}\n`;
+      out += `\n${qi + 1}. ${q.q}\n${a}\n`;
     });
   });
   return out;

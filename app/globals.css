@@ -8,24 +8,42 @@
   --muted: #666666;
   --border: #e5e5e0;
   --card: #ffffff;
+  --accent: #1a1a1a;
+  --accent-grad: linear-gradient(135deg, #1a1a1a 0%, #2e2e2e 100%);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+/* iOS momentum scrolling */
+body {
+  -webkit-overflow-scrolling: touch;
 }
 
 textarea,
 input {
   font-family: inherit;
+  font-size: 16px; /* prevent iOS auto-zoom on focus */
 }
 
 textarea:focus,
@@ -33,11 +51,17 @@ input:focus {
   outline: none;
 }
 
-/* Smooth accordion animation */
+/* Selection */
+::selection {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* Accordion */
 .section-body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: grid-template-rows 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .section-body.open {
@@ -49,52 +73,36 @@ input:focus {
   min-height: 0;
 }
 
-/* Chevron rotation */
+/* Chevron */
 .chevron {
-  transition: transform 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .chevron.open {
   transform: rotate(180deg);
 }
 
-/* Question fade-in */
+/* Question fade-in (staggered) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translate3d(0, 8px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .question {
-  animation: fadeInUp 0.3s ease forwards;
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Save indicator */
-@keyframes pulseIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.saved-indicator {
-  animation: pulseIn 0.25s ease;
-}
-
-/* Toast */
+/* Toast slide-up */
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translate(-50%, 12px);
+    transform: translate(-50%, 16px);
   }
   to {
     opacity: 1;
@@ -103,15 +111,152 @@ input:focus {
 }
 
 .toast {
-  animation: slideUp 0.3s ease;
+  animation: slideUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Confetti container */
+/* Confetti */
 .confetti {
   position: fixed;
   top: -10px;
   width: 8px;
-  height: 8px;
+  height: 14px;
   pointer-events: none;
   z-index: 9999;
+  border-radius: 1px;
+}
+
+/* Hero subtle gradient */
+.hero-bg {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(80% 60% at 0% 100%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
+    #1a1a1a;
+}
+
+/* Progress bar shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.progress-fill {
+  background-image: linear-gradient(
+    90deg,
+    #1a1a1a 0%,
+    #404040 50%,
+    #1a1a1a 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+
+/* Save pulse */
+@keyframes savePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+}
+
+.save-dot {
+  animation: savePulse 1s ease-in-out infinite;
+}
+
+/* Card hover lift (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  .section-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.section-card {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s ease;
+}
+
+/* Active tap state on touch devices */
+@media (hover: none) {
+  .tap-scale:active {
+    transform: scale(0.98);
+    transition: transform 0.08s ease;
+  }
+}
+
+/* Safe area utilities */
+.pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 12px); }
+
+/* Achievement card */
+@keyframes achievementIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, 4px) scale(1.04);
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.achievement {
+  animation: achievementIn 0.5s cubic-bezier(0.22, 1.2, 0.36, 1) both,
+    achievementOut 0.4s ease 2.2s forwards;
+}
+
+@keyframes achievementOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -16px) scale(0.95);
+  }
+}
+
+@keyframes iconWobble {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-12deg) scale(1.12); }
+  50% { transform: rotate(8deg) scale(1.08); }
+  75% { transform: rotate(-4deg) scale(1.04); }
+}
+
+.achievement-icon {
+  display: inline-block;
+  animation: iconWobble 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Level-up emoji bounce */
+@keyframes levelBounce {
+  0%, 100% { transform: scale(1) rotate(0); }
+  30% { transform: scale(1.5) rotate(-10deg); }
+  60% { transform: scale(1.2) rotate(8deg); }
+}
+
+.level-bounce {
+  display: inline-block;
+  animation: levelBounce 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Victory bounce (final) */
+@keyframes victoryBounce {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(20deg); opacity: 1; }
+  80% { transform: scale(0.95) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.victory-bounce {
+  display: inline-block;
+  animation: victoryBounce 0.9s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
